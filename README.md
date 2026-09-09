@@ -1,8 +1,11 @@
-# ArenaPulse API
+# ArenaPulse
 
-Backend de uma plataforma de desafios e campanhas para comunidades de EA Sports FC e FPS.
+Hub full stack de desafios e campanhas para comunidades de EA Sports FC e FPS.
 O projeto combina jogos, gamificação e engajamento digital: participantes entram em desafios,
 registram resultados, ganham pontos e disputam rankings por recompensas.
+
+- Site: https://arenapulse-api.vercel.app
+- Documentação da API: https://arenapulse-api.vercel.app/docs
 
 ## Por que este projeto é bom para portfólio
 
@@ -20,6 +23,7 @@ registram resultados, ganham pontos e disputam rankings por recompensas.
 - Pytest
 - Docker Compose
 - Deploy serverless na Vercel
+- Frontend responsivo em HTML, CSS e JavaScript
 
 ## Funcionalidades do MVP
 
@@ -31,6 +35,8 @@ registram resultados, ganham pontos e disputam rankings por recompensas.
 - Ranking com critérios de desempate.
 - Dashboard pessoal.
 - Swagger/OpenAPI automático.
+- Hub público com busca e filtros de desafios.
+- Área autenticada para criar desafios e registrar placares.
 
 ## Executar sem Docker
 

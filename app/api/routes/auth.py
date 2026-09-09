@@ -37,7 +37,7 @@ def login(
     user = db.scalar(
         select(User).where(or_(User.email == login_value, User.username == login_value))
     )
-    if not user or not verify_password(form.password, user.password_hash):
+    if not user or not user.is_active or not verify_password(form.password, user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Credenciais inválidas",

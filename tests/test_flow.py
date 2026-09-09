@@ -30,6 +30,10 @@ def test_complete_player_flow(client: TestClient, auth_headers: dict[str, str]):
     joined = client.post(f"/api/v1/challenges/{challenge_id}/join", headers=auth_headers)
     assert joined.status_code == 201
 
+    participations = client.get("/api/v1/me/participations", headers=auth_headers)
+    assert participations.status_code == 200
+    assert participations.json()[0]["challenge_id"] == challenge_id
+
     result = client.post(
         f"/api/v1/challenges/{challenge_id}/results",
         headers=auth_headers,
@@ -53,4 +57,3 @@ def test_rejects_duplicate_registration(client: TestClient):
     payload = {"email": "same@example.com", "username": "sameuser", "password": "senha-forte"}
     assert client.post("/api/v1/auth/register", json=payload).status_code == 201
     assert client.post("/api/v1/auth/register", json=payload).status_code == 409
-

@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.core.security import get_current_user
 from app.models.domain import Participation, User
-from app.schemas.domain import Dashboard, UserRead
+from app.schemas.domain import Dashboard, ParticipationRead, UserRead
 
 router = APIRouter(prefix="/me", tags=["Meu perfil"])
 
@@ -36,4 +36,18 @@ def dashboard(
         total_points=values[1],
         total_matches=values[2],
         total_wins=values[3],
+    )
+
+
+@router.get("/participations", response_model=list[ParticipationRead])
+def participations(
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
+) -> list[Participation]:
+    return list(
+        db.scalars(
+            select(Participation)
+            .where(Participation.user_id == current_user.id)
+            .order_by(Participation.joined_at.desc())
+        )
     )

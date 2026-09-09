@@ -1,0 +1,71 @@
+/* Hallmark · macrostructure: Workbench · tone: competitive technical · anchor hue: amber
+ * genre: atmospheric · theme: Midnight · enrichment: none · nav: N13 · footer: Ft2
+ * pre-emit critique: P5 H5 E4 S5 R5 V5 · contrast: pass (40–41)
+ * slop: pass (42–45) · honest: pass (46) · chrome: pass (47) · tokens: pass (48)
+ * responsive: pass (49) · icons: pass (30) · mobile: pass (34, 49, 50–57)
+ */
+:root {
+  --color-paper: oklch(16% 0.018 258);
+  --color-paper-2: oklch(20% 0.022 258);
+  --color-paper-3: oklch(24% 0.025 258);
+  --color-paper-raised: oklch(28% 0.026 258);
+  --color-ink: oklch(95% 0.012 86);
+  --color-ink-2: oklch(87% 0.016 86);
+  --color-muted: oklch(72% 0.018 258);
+  --color-rule: oklch(34% 0.026 258);
+  --color-rule-2: oklch(44% 0.03 258);
+  --color-accent: oklch(80% 0.17 82);
+  --color-accent-ink: oklch(20% 0.03 82);
+  --color-focus: oklch(87% 0.18 92);
+  --color-success: oklch(75% 0.15 148);
+  --color-error: oklch(70% 0.18 28);
+  --color-overlay: oklch(8% 0.015 258 / 0.82);
+  --color-shadow: oklch(7% 0.02 258 / 0.42);
+
+  --font-display: "Tomorrow", "Arial Narrow", sans-serif;
+  --font-body: "Switzer", system-ui, sans-serif;
+
+  --space-3xs: 0.125rem;
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
+  --space-4xl: 9rem;
+
+  --text-xs: 0.72rem;
+  --text-sm: 0.84rem;
+  --text-base: 1rem;
+  --text-md: 1.22rem;
+  --text-lg: 1.5rem;
+  --text-xl: 1.9rem;
+  --text-2xl: 2.4rem;
+  --text-display: clamp(2.35rem, 5.4vw, 5rem);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 110ms;
+  --dur-short: 200ms;
+  --dur-long: 380ms;
+
+  --radius-sm: 0.35rem;
+  --radius-md: 0.7rem;
+  --radius-lg: 1rem;
+  --rule-hair: 1px;
+  --page-gutter: clamp(1rem, 4vw, 3.5rem);
+  --content-max: 92rem;
+  --banner-height: 4.5rem;
+
+  --z-base: 1;
+  --z-raised: 10;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-sticky-nav: 210;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-tooltip: 600;
+}

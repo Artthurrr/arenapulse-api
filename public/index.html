@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#11141d" />
+    <meta
+      name="description"
+      content="ArenaPulse reúne desafios, resultados e rankings para jogadores de EA Sports FC e FPS."
+    />
+    <meta property="og:title" content="ArenaPulse — sua partida vale pontos" />
+    <meta
+      property="og:description"
+      content="Entre em desafios, registre resultados e acompanhe sua posição na comunidade."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://arenapulse-api.vercel.app/" />
+    <meta
+      property="og:image"
+      content="https://arenapulse-api.vercel.app/og.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ArenaPulse — sua partida vale pontos" />
+    <meta
+      name="twitter:description"
+      content="Desafios e rankings para comunidades de EA Sports FC e FPS."
+    />
+    <meta
+      name="twitter:image"
+      content="https://arenapulse-api.vercel.app/og.png"
+    />
+    <title>ArenaPulse — desafios e rankings gamer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tomorrow:wght@600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/tokens.css" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <!--
+      THESIS: ArenaPulse é uma mesa de competição em uso, não um painel de cards neon.
+      OWN-WORLD: carvão azulado, superfícies de placar, âmbar de arbitragem e tipografia Tomorrow + Switzer.
+      STORY: o visitante vê desafios reais, entende a pontuação, entra e acompanha a classificação.
+      FIRST VIEWPORT: barra de operação; chamada curta à esquerda; desafios em linhas e ranking em torre.
+      FORM: mesa de análise de partida, direção atribuída 6/7, seed ce1076e7.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+    -->
+    <a class="skip-link" href="#arena">Ir para a arena</a>
+
+    <header class="topbar" aria-label="Cabeçalho principal">
+      <a class="brand" href="#arena" aria-label="ArenaPulse, início">
+        <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true">
+          <path d="M6 27 13 9h14l7 18-7 4H13Z" />
+          <path d="m14 25 6-11 6 11M11 27h18" />
+        </svg>
+        <span>ArenaPulse</span>
+      </a>
+
+      <button
+        class="search-trigger"
+        type="button"
+        aria-haspopup="dialog"
+        aria-controls="search-dialog"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="6.5" />
+          <path d="m16 16 4 4" />
+        </svg>
+        <span>Buscar desafios</span>
+        <kbd>Ctrl K</kbd>
+      </button>
+
+      <nav class="topbar__actions" aria-label="Navegação principal">
+        <a href="#ranking">Ranking</a>
+        <button class="button button--quiet" type="button" data-open-auth>
+          Entrar
+        </button>
+      </nav>
+    </header>
+
+    <main id="arena" class="shell">
+      <section class="arena-head" aria-labelledby="arena-title">
+        <div>
+          <p class="status-line">
+            <span aria-hidden="true"></span> Temporada demonstrativa ativa
+          </p>
+          <h1 id="arena-title">Sua próxima partida já vale pontos.</h1>
+        </div>
+        <p>
+          Entre em um desafio de EA Sports FC ou FPS, registre o placar e
+          acompanhe sua subida no ranking. Sem planilha paralela, sem resultado
+          perdido no grupo.
+        </p>
+      </section>
+
+      <div class="score-ribbon" role="region" aria-label="Resumo da arena">
+        <span><strong id="challenge-count">3</strong> desafios abertos</span>
+        <span><strong>3</strong> jogos</span>
+        <span><strong>Vitória</strong> vale 3 pts</span>
+        <a href="/docs">API aberta <span aria-hidden="true">↗</span></a>
+      </div>
+
+      <section class="workbench" aria-label="Central de desafios">
+        <article class="challenge-board" aria-labelledby="challenges-title">
+          <header class="panel-head">
+            <div>
+              <h2 id="challenges-title">Desafios abertos</h2>
+              <p>Escolha a fila e entre na disputa.</p>
+            </div>
+            <div class="segmented" role="group" aria-label="Filtrar por jogo">
+              <button
+                class="is-active"
+                type="button"
+                aria-pressed="true"
+                data-filter="all"
+              >
+                Todos
+              </button>
+              <button type="button" aria-pressed="false" data-filter="football">
+                EA FC
+              </button>
+              <button type="button" aria-pressed="false" data-filter="fps">
+                FPS
+              </button>
+            </div>
+          </header>
+
+          <div class="challenge-list" id="challenge-list" aria-live="polite">
+            <article class="challenge-row" data-game="football">
+              <div class="game-sigil game-sigil--fc" aria-hidden="true">FC</div>
+              <div class="challenge-row__main">
+                <span class="game-name">EA Sports FC</span>
+                <h3>Fim de semana sem perder</h3>
+                <p>Some pontos em partidas até domingo.</p>
+              </div>
+              <dl class="challenge-meta">
+                <div>
+                  <dt>Recompensa</dt>
+                  <dd>Badge Invicto</dd>
+                </div>
+                <div>
+                  <dt>Janela</dt>
+                  <dd>7 dias</dd>
+                </div>
+              </dl>
+              <button
+                class="button button--join"
+                type="button"
+                data-challenge-id="1"
+              >
+                Entrar
+              </button>
+            </article>
+
+            <article class="challenge-row" data-game="fps">
+              <div class="game-sigil game-sigil--fps" aria-hidden="true">
+                CS
+              </div>
+              <div class="challenge-row__main">
+                <span class="game-name">Counter-Strike 2</span>
+                <h3>Esquadrão preciso</h3>
+                <p>Vitórias ranqueadas contam para a tabela.</p>
+              </div>
+              <dl class="challenge-meta">
+                <div>
+                  <dt>Recompensa</dt>
+                  <dd>Badge Tático</dd>
+                </div>
+                <div>
+                  <dt>Janela</dt>
+                  <dd>5 dias</dd>
+                </div>
+              </dl>
+              <button
+                class="button button--join"
+                type="button"
+                data-challenge-id="2"
+              >
+                Entrar
+              </button>
+            </article>
+
+            <article class="challenge-row" data-game="fps">
+              <div class="game-sigil game-sigil--val" aria-hidden="true">V</div>
+              <div class="challenge-row__main">
+                <span class="game-name">Valorant</span>
+                <h3>Clutch da semana</h3>
+                <p>Registre suas partidas e mantenha a sequência.</p>
+              </div>
+              <dl class="challenge-meta">
+                <div>
+                  <dt>Recompensa</dt>
+                  <dd>Badge Clutch</dd>
+                </div>
+                <div>
+                  <dt>Janela</dt>
+                  <dd>10 dias</dd>
+                </div>
+              </dl>
+              <button
+                class="button button--join"
+                type="button"
+                data-challenge-id="3"
+              >
+                Entrar
+              </button>
+            </article>
+          </div>
+        </article>
+
+        <aside
+          class="ranking-tower"
+          id="ranking"
+          aria-labelledby="ranking-title"
+        >
+          <header class="panel-head">
+            <div>
+              <h2 id="ranking-title">Classificação</h2>
+              <p>Fim de semana sem perder</p>
+            </div>
+            <button
+              class="icon-button"
+              type="button"
+              aria-label="Atualizar classificação"
+              data-refresh-ranking
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20 7v5h-5M4 17v-5h5" />
+                <path
+                  d="M6.1 9a7 7 0 0 1 11.6-2.6L20 9M4 15l2.3 2.6A7 7 0 0 0 17.9 15"
+                />
+              </svg>
+            </button>
+          </header>
+
+          <ol class="ranking-list" id="ranking-list">
+            <li>
+              <span class="rank">01</span>
+              <span class="player"
+                ><strong>demo_tatica10</strong><small>6 partidas</small></span
+              >
+              <span class="points">14 <small>pts</small></span>
+            </li>
+            <li>
+              <span class="rank">02</span>
+              <span class="player"
+                ><strong>demo_viperbr</strong><small>5 partidas</small></span
+              >
+              <span class="points">11 <small>pts</small></span>
+            </li>
+            <li>
+              <span class="rank">03</span>
+              <span class="player"
+                ><strong>demo_noscope</strong><small>4 partidas</small></span
+              >
+              <span class="points">9 <small>pts</small></span>
+            </li>
+            <li>
+              <span class="rank">04</span>
+              <span class="player"
+                ><strong>demo_meia9</strong><small>3 partidas</small></span
+              >
+              <span class="points">8 <small>pts</small></span>
+            </li>
+          </ol>
+
+          <p class="demo-note">
+            Nomes e placares marcados como <strong>demo</strong> ilustram o
+            funcionamento do ranking.
+          </p>
+        </aside>
+      </section>
+
+      <section
+        class="player-panel"
+        id="player-panel"
+        aria-labelledby="player-title"
+        hidden
+      >
+        <header class="player-panel__head">
+          <div>
+            <p class="status-line">
+              <span aria-hidden="true"></span> Sessão ativa
+            </p>
+            <h2 id="player-title">
+              Área de <span id="player-name">jogador</span>
+            </h2>
+          </div>
+          <button class="button button--quiet" type="button" data-logout>
+            Sair
+          </button>
+        </header>
+        <dl class="player-stats">
+          <div>
+            <dt>Desafios</dt>
+            <dd id="stat-challenges">0</dd>
+          </div>
+          <div>
+            <dt>Pontos</dt>
+            <dd id="stat-points">0</dd>
+          </div>
+          <div>
+            <dt>Partidas</dt>
+            <dd id="stat-matches">0</dd>
+          </div>
+          <div>
+            <dt>Vitórias</dt>
+            <dd id="stat-wins">0</dd>
+          </div>
+        </dl>
+        <div class="player-actions">
+          <button class="button button--primary" type="button" data-open-result>
+            Registrar resultado
+          </button>
+          <button class="button" type="button" data-open-create>
+            Criar desafio
+          </button>
+        </div>
+      </section>
+
+      <section class="playbook" aria-labelledby="playbook-title">
+        <header>
+          <h2 id="playbook-title">Da fila ao ranking</h2>
+          <p>
+            Um fluxo curto, mas completo, para organizar uma comunidade
+            competitiva.
+          </p>
+        </header>
+        <ol>
+          <li>
+            <span>01</span><strong>Crie seu perfil</strong>
+            <p>Um login reúne sua atividade.</p>
+          </li>
+          <li>
+            <span>02</span><strong>Entre na disputa</strong>
+            <p>Escolha um desafio ativo.</p>
+          </li>
+          <li>
+            <span>03</span><strong>Registre o placar</strong>
+            <p>A API calcula os pontos.</p>
+          </li>
+          <li>
+            <span>04</span><strong>Suba na tabela</strong>
+            <p>O ranking muda a cada partida.</p>
+          </li>
+        </ol>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>ArenaPulse · projeto full stack para portfólio</span>
+      <span
+        >FastAPI + JavaScript ·
+        <a href="https://github.com/Artthurrr/arenapulse-api"
+          >código no GitHub</a
+        ></span
+      >
+    </footer>
+
+    <dialog class="dialog dialog--search" id="search-dialog">
+      <form method="dialog" class="dialog__frame">
+        <div class="dialog__head">
+          <div>
+            <h2>Buscar desafios</h2>
+            <p>Procure por jogo, título ou recompensa.</p>
+          </div>
+          <button
+            class="icon-button"
+            value="cancel"
+            aria-label="Fechar busca"
+            type="submit"
+          >
+            ×
+          </button>
+        </div>
+        <label class="field">
+          <span>Busca</span>
+          <input
+            id="search-input"
+            type="search"
+            autocomplete="off"
+            placeholder="Ex.: Valorant"
+          />
+        </label>
+        <div
+          class="search-results"
+          id="search-results"
+          aria-live="polite"
+        ></div>
+      </form>
+    </dialog>
+
+    <dialog class="dialog" id="auth-dialog">
+      <div class="dialog__frame">
+        <div class="dialog__head">
+          <div>
+            <h2 id="auth-title">Entrar na ArenaPulse</h2>
+            <p>Use sua conta ou crie uma em menos de um minuto.</p>
+          </div>
+          <button
+            class="icon-button"
+            aria-label="Fechar autenticação"
+            type="button"
+            data-close-dialog
+          >
+            ×
+          </button>
+        </div>
+        <div class="auth-switch" role="group" aria-label="Tipo de acesso">
+          <button
+            class="is-active"
+            type="button"
+            data-auth-mode="login"
+            aria-pressed="true"
+          >
+            Entrar
+          </button>
+          <button type="button" data-auth-mode="register" aria-pressed="false">
+            Criar conta
+          </button>
+        </div>
+        <form class="form-stack" id="login-form">
+          <label class="field"
+            ><span>Usuário ou e-mail</span
+            ><input
+              name="username"
+              type="text"
+              autocomplete="username"
+              required
+          /></label>
+          <label class="field"
+            ><span>Senha</span
+            ><input
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              minlength="8"
+              required
+          /></label>
+          <p class="form-message" data-form-message aria-live="polite"></p>
+          <button class="button button--primary" type="submit">Entrar</button>
+        </form>
+        <form class="form-stack" id="register-form" hidden>
+          <label class="field"
+            ><span>Nome de jogador</span
+            ><input
+              name="username"
+              type="text"
+              autocomplete="username"
+              minlength="3"
+              maxlength="40"
+              pattern="[a-zA-Z0-9_.-]+"
+              required
+          /></label>
+          <label class="field"
+            ><span>E-mail</span
+            ><input name="email" type="email" autocomplete="email" required
+          /></label>
+          <label class="field"
+            ><span>Senha</span
+            ><input
+              name="password"
+              type="password"
+              autocomplete="new-password"
+              minlength="8"
+              required
+          /></label>
+          <p class="field-hint">
+            Use 8 caracteres ou mais. O nome aceita letras, números, ponto,
+            hífen e underline.
+          </p>
+          <p class="form-message" data-form-message aria-live="polite"></p>
+          <button class="button button--primary" type="submit">
+            Criar conta e entrar
+          </button>
+        </form>
+      </div>
+    </dialog>
+
+    <dialog class="dialog" id="create-dialog">
+      <form class="dialog__frame form-stack" id="create-form">
+        <div class="dialog__head">
+          <div>
+            <h2>Criar desafio</h2>
+            <p>Publique uma nova disputa para a comunidade.</p>
+          </div>
+          <button
+            class="icon-button"
+            aria-label="Fechar criação"
+            type="button"
+            data-close-dialog
+          >
+            ×
+          </button>
+        </div>
+        <label class="field"
+          ><span>Título</span
+          ><input
+            name="title"
+            type="text"
+            minlength="4"
+            maxlength="120"
+            required
+        /></label>
+        <label class="field"
+          ><span>Jogo</span
+          ><select name="game_id" id="game-select" required></select
+        ></label>
+        <label class="field"
+          ><span>Descrição</span
+          ><textarea
+            name="description"
+            minlength="10"
+            maxlength="2000"
+            rows="3"
+            required
+          ></textarea>
+        </label>
+        <label class="field"
+          ><span>Recompensa</span
+          ><input
+            name="reward"
+            type="text"
+            maxlength="160"
+            placeholder="Ex.: Badge da temporada"
+        /></label>
+        <div class="field-pair">
+          <label class="field"
+            ><span>Início</span
+            ><input name="starts_at" type="datetime-local" required
+          /></label>
+          <label class="field"
+            ><span>Fim</span
+            ><input name="ends_at" type="datetime-local" required
+          /></label>
+        </div>
+        <p class="form-message" data-form-message aria-live="polite"></p>
+        <button class="button button--primary" type="submit">
+          Publicar desafio
+        </button>
+      </form>
+    </dialog>
+
+    <dialog class="dialog" id="result-dialog">
+      <form class="dialog__frame form-stack" id="result-form">
+        <div class="dialog__head">
+          <div>
+            <h2>Registrar resultado</h2>
+            <p>Envie o placar de um desafio em que você entrou.</p>
+          </div>
+          <button
+            class="icon-button"
+            aria-label="Fechar resultado"
+            type="button"
+            data-close-dialog
+          >
+            ×
+          </button>
+        </div>
+        <label class="field"
+          ><span>Desafio</span
+          ><select
+            name="challenge_id"
+            id="participation-select"
+            required
+          ></select
+        ></label>
+        <div class="field-pair">
+          <label class="field"
+            ><span>Seu placar</span
+            ><input name="score_for" type="number" min="0" max="999" required
+          /></label>
+          <label class="field"
+            ><span>Adversário</span
+            ><input
+              name="score_against"
+              type="number"
+              min="0"
+              max="999"
+              required
+          /></label>
+        </div>
+        <label class="field"
+          ><span>Nota opcional</span
+          ><textarea
+            name="notes"
+            maxlength="280"
+            rows="2"
+            placeholder="Como foi a partida?"
+          ></textarea>
+        </label>
+        <p class="form-message" data-form-message aria-live="polite"></p>
+        <button class="button button--primary" type="submit">
+          Confirmar placar
+        </button>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>
