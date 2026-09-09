@@ -1,4 +1,5 @@
 from datetime import UTC, datetime
+from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import select
@@ -44,8 +45,8 @@ def get_challenge_or_404(db: Session, challenge_id: int) -> Challenge:
 @router.post("", response_model=ChallengeRead, status_code=status.HTTP_201_CREATED)
 def create_challenge(
     payload: ChallengeCreate,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
 ) -> Challenge:
     game = db.get(Game, payload.game_id)
     if not game or not game.is_active:
@@ -59,11 +60,11 @@ def create_challenge(
 
 @router.get("", response_model=list[ChallengeRead])
 def list_challenges(
+    db: Annotated[Session, Depends(get_db)],
     game_slug: str | None = None,
-    challenge_status: ChallengeStatus | None = Query(default=None, alias="status"),
-    limit: int = Query(default=20, ge=1, le=100),
-    offset: int = Query(default=0, ge=0),
-    db: Session = Depends(get_db),
+    challenge_status: Annotated[ChallengeStatus | None, Query(alias="status")] = None,
+    limit: Annotated[int, Query(ge=1, le=100)] = 20,
+    offset: Annotated[int, Query(ge=0)] = 0,
 ) -> list[Challenge]:
     query = select(Challenge).options(joinedload(Challenge.game)).join(Challenge.game)
     if game_slug:
@@ -75,7 +76,9 @@ def list_challenges(
 
 
 @router.get("/{challenge_id}", response_model=ChallengeRead)
-def get_challenge(challenge_id: int, db: Session = Depends(get_db)) -> Challenge:
+def get_challenge(
+    challenge_id: int, db: Annotated[Session, Depends(get_db)]
+) -> Challenge:
     return get_challenge_or_404(db, challenge_id)
 
 
@@ -84,8 +87,8 @@ def get_challenge(challenge_id: int, db: Session = Depends(get_db)) -> Challenge
 )
 def join_challenge(
     challenge_id: int,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
 ) -> Participation:
     challenge = get_challenge_or_404(db, challenge_id)
     if challenge.status != ChallengeStatus.PUBLISHED:
@@ -113,8 +116,8 @@ def join_challenge(
 def submit_result(
     challenge_id: int,
     payload: ResultCreate,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
 ) -> MatchResult:
     challenge = get_challenge_or_404(db, challenge_id)
     participation = db.scalar(
@@ -155,8 +158,8 @@ def submit_result(
 @router.get("/{challenge_id}/leaderboard", response_model=list[LeaderboardEntry])
 def leaderboard(
     challenge_id: int,
-    limit: int = Query(default=50, ge=1, le=100),
-    db: Session = Depends(get_db),
+    db: Annotated[Session, Depends(get_db)],
+    limit: Annotated[int, Query(ge=1, le=100)] = 50,
 ) -> list[LeaderboardEntry]:
     get_challenge_or_404(db, challenge_id)
     rows = db.execute(

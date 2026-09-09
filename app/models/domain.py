@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import enum
 from datetime import UTC, datetime
+from enum import StrEnum
 
 from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -13,18 +13,18 @@ def utcnow() -> datetime:
     return datetime.now(UTC)
 
 
-class UserRole(str, enum.Enum):
+class UserRole(StrEnum):
     PLAYER = "player"
     MANAGER = "manager"
     ADMIN = "admin"
 
 
-class GameCategory(str, enum.Enum):
+class GameCategory(StrEnum):
     FOOTBALL = "football"
     FPS = "fps"
 
 
-class ChallengeStatus(str, enum.Enum):
+class ChallengeStatus(StrEnum):
     DRAFT = "draft"
     PUBLISHED = "published"
     FINISHED = "finished"
@@ -117,4 +117,3 @@ class MatchResult(Base):
     submitted_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
     participation: Mapped[Participation] = relationship(back_populates="results")
-

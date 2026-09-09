@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
@@ -11,13 +13,14 @@ router = APIRouter(prefix="/me", tags=["Meu perfil"])
 
 
 @router.get("", response_model=UserRead)
-def read_me(current_user: User = Depends(get_current_user)) -> User:
+def read_me(current_user: Annotated[User, Depends(get_current_user)]) -> User:
     return current_user
 
 
 @router.get("/dashboard", response_model=Dashboard)
 def dashboard(
-    db: Session = Depends(get_db), current_user: User = Depends(get_current_user)
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
 ) -> Dashboard:
     values = db.execute(
         select(
@@ -34,4 +37,3 @@ def dashboard(
         total_matches=values[2],
         total_wins=values[3],
     )
-

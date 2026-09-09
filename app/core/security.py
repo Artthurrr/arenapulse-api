@@ -1,4 +1,5 @@
 from datetime import UTC, datetime, timedelta
+from typing import Annotated
 
 import jwt
 from fastapi import Depends, HTTPException, status
@@ -30,7 +31,8 @@ def create_access_token(user_id: int) -> str:
 
 
 def get_current_user(
-    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
+    token: Annotated[str, Depends(oauth2_scheme)],
+    db: Annotated[Session, Depends(get_db)],
 ) -> User:
     credentials_error = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -49,4 +51,3 @@ def get_current_user(
     if not user or not user.is_active:
         raise credentials_error
     return user
-

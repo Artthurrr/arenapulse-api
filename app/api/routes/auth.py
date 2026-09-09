@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import or_, select
@@ -12,7 +14,7 @@ router = APIRouter(prefix="/auth", tags=["Autenticação"])
 
 
 @router.post("/register", response_model=UserRead, status_code=status.HTTP_201_CREATED)
-def register(payload: UserCreate, db: Session = Depends(get_db)) -> User:
+def register(payload: UserCreate, db: Annotated[Session, Depends(get_db)]) -> User:
     email = payload.email.lower()
     username = payload.username.lower()
     existing = db.scalar(select(User).where(or_(User.email == email, User.username == username)))
@@ -28,7 +30,8 @@ def register(payload: UserCreate, db: Session = Depends(get_db)) -> User:
 
 @router.post("/login", response_model=Token)
 def login(
-    form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
+    form: Annotated[OAuth2PasswordRequestForm, Depends()],
+    db: Annotated[Session, Depends(get_db)],
 ) -> Token:
     login_value = form.username.lower()
     user = db.scalar(
@@ -41,4 +44,3 @@ def login(
             headers={"WWW-Authenticate": "Bearer"},
         )
     return Token(access_token=create_access_token(user.id))
-

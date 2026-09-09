@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -10,6 +12,5 @@ router = APIRouter(prefix="/games", tags=["Jogos"])
 
 
 @router.get("", response_model=list[GameRead])
-def list_games(db: Session = Depends(get_db)) -> list[Game]:
+def list_games(db: Annotated[Session, Depends(get_db)]) -> list[Game]:
     return list(db.scalars(select(Game).where(Game.is_active.is_(True)).order_by(Game.name)))
-
